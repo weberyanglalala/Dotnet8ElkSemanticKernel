@@ -18,15 +18,14 @@ public class ElkTextSearchService : IElkTextSearchService
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly VectorStoreTextSearch<Hotel> _textSearch;
 
-    public ElkTextSearchService(Kernel kernel, ITextEmbeddingGenerationService embeddingGenerationService,
-        IVectorStoreRecordCollection<string, Hotel> hotelCollection,
-        IWebHostEnvironment webHostEnvironment, VectorStoreTextSearch<Hotel> textSearch)
+    public ElkTextSearchService(Kernel kernel,
+        IWebHostEnvironment webHostEnvironment)
     {
         _kernel = kernel;
-        _embeddingGenerationService = embeddingGenerationService;
-        _hotelCollection = hotelCollection;
         _webHostEnvironment = webHostEnvironment;
-        _textSearch = textSearch;
+        _embeddingGenerationService = kernel.GetRequiredService<ITextEmbeddingGenerationService>();
+        _hotelCollection = kernel.GetRequiredService<IVectorStoreRecordCollection<string, Hotel>>();
+        _textSearch = kernel.GetRequiredService<VectorStoreTextSearch<Hotel>>();
     }
 
     public async Task SeedHotelCollectionAsync()
@@ -121,6 +120,7 @@ public class ElkTextSearchService : IElkTextSearchService
         {
             sb.Append(temp);
         }
+
         return sb.ToString();
     }
 }

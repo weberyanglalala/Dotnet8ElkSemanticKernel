@@ -53,13 +53,13 @@ public static class SemanticKernelConfiguration
         {
             var serviceProvider = services.BuildServiceProvider();
             var kernel = serviceProvider.GetRequiredService<Kernel>();
-            var embeddings = kernel.GetRequiredService<ITextEmbeddingGenerationService>();
-            var vectorStoreCollection =
-                kernel.GetRequiredService<IVectorStoreRecordCollection<string, Hotel>>();
             var textSearch = kernel.GetRequiredService<VectorStoreTextSearch<Hotel>>();
             kernel.Plugins.Add(textSearch.CreateWithGetTextSearchResults("SearchPlugin"));
+
+            // the web host environment is not required for the service
+            // it is used for get wwwroot path static files
             var webHostEnvironment = serviceProvider.GetRequiredService<IWebHostEnvironment>();
-            return new ElkTextSearchService(kernel, embeddings, vectorStoreCollection, webHostEnvironment, textSearch);
+            return new ElkTextSearchService(kernel, webHostEnvironment);
         });
         return services;
     }
