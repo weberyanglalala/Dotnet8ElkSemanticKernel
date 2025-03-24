@@ -22,8 +22,8 @@ public static class SemanticKernelConfiguration
 
             var openAiApiKey = configuration["OpenAiApiKey"]
                                ?? throw new InvalidOperationException("OpenAiApiKey is not configured.");
-            kernelBuilder.Services.AddOpenAIChatCompletion("gpt-4o-2024-08-06", openAiApiKey);
-            kernelBuilder.Services.AddOpenAITextEmbeddingGeneration("text-embedding-ada-002", openAiApiKey);
+            kernelBuilder.Services.AddOpenAIChatCompletion("gpt-4o-mini", openAiApiKey);
+            kernelBuilder.Services.AddOpenAITextEmbeddingGeneration("text-embedding-3-small", openAiApiKey);
 
             // Register text search service.
             kernelBuilder.AddVectorStoreTextSearch<Hotel>();
@@ -38,6 +38,7 @@ public static class SemanticKernelConfiguration
                 .Authentication(new ApiKey(elkApiKey));
             kernelBuilder.AddElasticsearchVectorStoreRecordCollection<string, Hotel>("skhotels",
                 elasticsearchClientSettings);
+
 
             return kernelBuilder.Build();
         });
